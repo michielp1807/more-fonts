@@ -1,0 +1,8 @@
+.vscode
+*.xcf
+*.blend
+*.blend1
+
+# Ignore font source files
+fonts/*/
+!fonts/my-fonts
