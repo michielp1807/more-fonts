@@ -1,5 +1,7 @@
 # MORE FONTS for ComputerCraft
-A library to print text using teletext pixels with various fonts, sizes, and text wrapping options!
+A library to print large text using teletext pixels with various fonts, sizes, and text wrapping options!
+
+![mf-header](https://github.com/MichielP1807/more-fonts/assets/16452219/bc8cd6c6-432b-45ac-8707-3392eb57ecc1)
 
 ## Basic usage
 Use the `print` function to print some text at the current cursor location:
@@ -46,10 +48,10 @@ mf.writeOn(term, "MORE FONTS can do text wrapping!", nil, nil, {
     anchorVer = "center",
 })
 ```
+![mf-font-options](https://github.com/MichielP1807/more-fonts/assets/16452219/fc7faccb-e982-477e-8a3b-a6cdd9522267)
+
 All values in the font options are optional, so you do not have to specify all of them.
 All numerical values in the font options except for `scale` are in *teletext pixels* (which are different from the *terminal character pixels* which are used for the (`x`, `y`) position for the `writeTo` function, every terminal character pixel consists of 2x3 teletext pixels).
-
-<!-- TODO: include picture -->
 
 ### Default font options
 After setting your own default values for any font options, these values will automatically be applied to any text (unless they are overwritten):
@@ -82,8 +84,7 @@ This library respects new line characters (`"\n"`) by default, but additional au
 local TERM_WIDTH, TERM_HEIGHT = term.getSize()
 mf.print(long_text, {wrapWidth = 2 * TERM_WIDTH})
 ```
-(remember that one terminal character pixel horizontally consists of 2 teletext pixels, so to get the full width we multiply the `TERM_WIDTH` by 2)
-
+Remember that one terminal character pixel horizontally consists of 2 teletext pixels, so to get the full width we multiply the `TERM_WIDTH` by 2.
 
 ### Text spacing
 By default, all fonts are monospace, meaning that every character takes up the same width.
@@ -101,7 +102,7 @@ mf.writeOn(term, "MORE\nFONTS", nil, nil, {dy = -18, textAlign = "left"})
 mf.writeOn(term, "MORE\nFONTS", nil, nil, {dy = 0, textAlign = "center"})
 mf.writeOn(term, "MORE\nFONTS", nil, nil, {dy = 18, textAlign = "right"})
 ```
-<!-- TODO: include picture -->
+![mf-text-align](https://github.com/MichielP1807/more-fonts/assets/16452219/644e5055-7d83-4c17-8312-68c46bfb34b3)
 
 Setting the text alignment will also change the default horizontal anchor position accordingly.
 You can manually change the horizontal anchor position using `anchorHor`:
@@ -110,7 +111,7 @@ mf.writeOn(term, "MORE\nFONTS", nil, nil, {dy = -18, textAlign = "left", anchorH
 mf.writeOn(term, "MORE\nFONTS", nil, nil, {dy = 0, textAlign = "center", anchorHor = "center"})
 mf.writeOn(term, "MORE\nFONTS", nil, nil, {dy = 18, textAlign = "right", anchorHor = "center"})
 ```
-<!-- TODO: include picture -->
+![mf-anchor-hor](https://github.com/MichielP1807/more-fonts/assets/16452219/06876522-d6c5-4e92-b327-d7aec7db7d0a)
 
 The vertical anchor position can be set using `anchorVer`:
 ```lua
@@ -118,21 +119,22 @@ mf.writeOn(term, "MORE\nFONTS", nil, nil, {dx = -32, anchorVer = "top"})
 mf.writeOn(term, "MORE\nFONTS", nil, nil, {dx = 0, anchorVer = "center"})
 mf.writeOn(term, "MORE\nFONTS", nil, nil, {dx = 32, anchorVer = "bottom"})
 ```
-<!-- TODO: include picture -->
+![mf-anchor-ver](https://github.com/MichielP1807/more-fonts/assets/16452219/95141bef-6af3-4751-bfa4-6951913453e5)
 
-As seen in these previous examples, you can also move the text using the `dx` and `dy` options. These `dx` and `dy` values are in *teletext pixels*, unlike the standard `x` and `y` of the `writeOn` function, so this is useful for precise positioning, or if you want to shift the text a bit from the center as in the examples above.
+As seen in these previous examples, you can also move the text using the `dx` and `dy` options. These `dx` and `dy` values are in *teletext pixels* (unlike the standard `x` and `y` of the `writeOn` function), so this is useful for precise positioning, or if you want to shift the text a bit from the center as in the examples above.
 
 
 ## Adding more custom fonts
 ### Create font from image texture
-To create your own fonts that you can use with this library, you must first create a PNG image texture of the font. The width and height of this image must be multiples of 16, and every character must be put in its correct place based on the default computer craft font (which is basically ASCII order with some additional characters).
-An example texture can be seen [here]<!-- TODO: add link -->.
+To create your own fonts that you can use with this library, you must first create a PNG image texture of the font. The width and height of this image must be multiples of 16, and every character must be put in its correct place based on the default ComputerCraft font (which is basically ASCII order with some additional characters).
 
 Once you have your image texture, you can convert it with the `0_texture2lua.py` Python script:
 ```
 ./0_texture2lua.py ./my-fonts/PixelPlace.png
 ```
 If you want to include `sepWidth`, `spaceWidth`, or `lineSepHeight` parameters with your font, or you want to include other metadata like the author name or font license, I recommend creating a `metadata.json` file in the same directory as the image texture. All properties in the `metadata.json` will automatically be included in the exported font file.
+
+In the [my-fonts](https://github.com/MichielP1807/more-fonts/tree/main/fonts/my-fonts) folder you can see the files I used to generate my PixelPlace font as an example.
 
 ### Convert TTF/OTF to image texture
 Instead of creating your own image textures, you can also convert TTF or OTF fonts to image textures automatically, just give it the path to the TTF or OTF font and the font size to use:
