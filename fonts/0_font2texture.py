@@ -16,8 +16,8 @@ def must_be_ttf_or_otf(filename):
     return filename
 
 parser = argparse.ArgumentParser()
-parser.add_argument("filename", type=must_be_ttf_or_otf)
-parser.add_argument("fontsize", type=int)
+parser.add_argument("filename", type=must_be_ttf_or_otf, help="path to TTF or OTF font to convert")
+parser.add_argument("fontsize", type=int, help="font size to export")
 args = parser.parse_args()
 
 CHARS = [
