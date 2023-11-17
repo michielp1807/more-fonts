@@ -1,5 +1,5 @@
 local expect = require("cc.expect")
-local mf = {} -- export table
+local mf = {} -- exported table
 
 local colorChar = {}
 for i = 1, 16 do colorChar[2 ^ (i - 1)] = ("0123456789abcdef"):sub(i, i) end
@@ -60,6 +60,26 @@ mf.setDefaultFontOptions = function(fontOptions)
     defaultOptions = fontOptions
 end
 
+---@param fontPath string
+---@return Font
+mf.loadFont = function(fontPath)
+    expect(1, fontPath, "string")
+    if not fs.exists(fontPath) then error("Can't find font " .. fontPath) end
+    local file, err = fs.open(fontPath, "r")
+    if not file then error("Can't open font " .. fontPath .. (err and (": " .. err) or "")) end
+    local str = file.readAll()
+    file.close()
+    if not str or #str < 1 then error("Can't read font " .. fontPath .. ": file is empty") end
+    local fontData = textutils.unserialise(str)
+    if not fontData then error("Can't unserialise font " .. fontPath .. ": is the file corrupt?") end
+    if type(fontData) ~= "table" then error("Can't load font " .. fontPath .. ": file does not contain a table") end
+    if not fontData.data or not fontData.startX or not fontData.lengthX or not fontData.charW or not fontData.charH then
+        error("Can't load font " .. fontPath .. ": font is missing essential properties")
+    end
+    return fontData
+end
+
+---@type { [string]: Font }
 local loaded_fonts = {}
 
 ---@param fontOptions FontOptions
@@ -69,21 +89,7 @@ local loaded_fonts = {}
 local function fontOptionsFillDefaults(fontOptions, x, y)
     local font = fontOptions.font or defaultOptions.font
     if type(font) == "string" then ---@cast font string
-        if not loaded_fonts[font] then
-            if not fs.exists(font) then error("Can't find font " .. fontOptions.font) end
-            local file, err = fs.open(font, "r")
-            if not file then error("Can't open font " .. font .. (err and (": " .. err) or "")) end
-            local str = file.readAll()
-            file.close()
-            if not str or #str < 1 then error("Can't read font " .. font .. ": file is empty") end
-            local fontData = textutils.unserialise(str)
-            if not fontData then error("Can't unserialise font " .. font .. ": is the file corrupt?") end
-            if type(fontData) ~= "table" then error("Can't load font " .. font .. ": file does not contain a table") end
-            if not fontData.data or not fontData.startX or not fontData.lengthX or not fontData.charW or not fontData.charH then
-                error("Can't load font " .. font .. ": font is missing essential properties")
-            end
-            loaded_fonts[font] = fontData
-        end
+        if not loaded_fonts[font] then loaded_fonts[font] = mf.loadFont(font) end
         font = loaded_fonts[font]
     end
 
@@ -93,8 +99,10 @@ local function fontOptionsFillDefaults(fontOptions, x, y)
     ---@class NonPartialFont: Font
     local npFont = font or mf.ccfont
     local eWidth = string.byte(npFont.lengthX, 102) - DATA_START -- width of 'e' character
-    npFont.sepWidth = fontOptions.sepWidth or defaultOptions.sepWidth or npFont.sepWidth or math.max(math.floor(npFont.charW / 6), 1)
-    npFont.spaceWidth = fontOptions.spaceWidth or defaultOptions.spaceWidth or npFont.spaceWidth or (condense and eWidth or npFont.charW)
+    npFont.sepWidth = fontOptions.sepWidth or defaultOptions.sepWidth or npFont.sepWidth or
+        math.max(math.floor(npFont.charW / 6), 1)
+    npFont.spaceWidth = fontOptions.spaceWidth or defaultOptions.spaceWidth or npFont.spaceWidth or
+        (condense and eWidth or npFont.charW)
     npFont.lineSepHeight = fontOptions.lineSepHeight or defaultOptions.lineSepHeight or npFont.lineSepHeight or 0
 
     ---@class NonPartialFontOptions: FontOptions
@@ -109,7 +117,8 @@ local function fontOptionsFillDefaults(fontOptions, x, y)
         condense = condense,
         endOnNewLine = fontOptions.endOnNewLine == nil and defaultOptions.endOnNewLine or fontOptions.endOnNewLine,
         textAlign = fontOptions.textAlign or defaultOptions.textAlign or (x and "left" or "center"),
-        anchorHor = fontOptions.anchorHor or defaultOptions.anchorHor or (fontOptions.textAlign or (x and "left" or "center")),
+        anchorHor = fontOptions.anchorHor or defaultOptions.anchorHor or
+            (fontOptions.textAlign or (x and "left" or "center")),
         anchorVer = fontOptions.anchorVer or defaultOptions.anchorVer or (y and "top" or "center"),
     }
 
@@ -490,7 +499,8 @@ local function drawMultiLineText(term, text, x, y, fontOptions, noScroll)
             end
         end
 
-        lastCharRow, lastCharRowStart = drawTextOneLine(term, lines[i], lx, ly, fontOptions, lastCharRow, lastCharRowStart)
+        lastCharRow, lastCharRowStart = drawTextOneLine(term, lines[i], lx, ly, fontOptions, lastCharRow,
+            lastCharRowStart)
     end
     if fontOptions.endOnNewLine then
         print()

@@ -6,3 +6,4 @@
 # Ignore font source files
 fonts/*/
 !fonts/my-fonts
+fonts.conf
