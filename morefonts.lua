@@ -99,10 +99,8 @@ local function fontOptionsFillDefaults(fontOptions, x, y)
     ---@class NonPartialFont: Font
     local npFont = font or mf.ccfont
     local eWidth = string.byte(npFont.lengthX, 102) - DATA_START -- width of 'e' character
-    npFont.sepWidth = fontOptions.sepWidth or defaultOptions.sepWidth or npFont.sepWidth or
-        math.max(math.floor(npFont.charW / 6), 1)
-    npFont.spaceWidth = fontOptions.spaceWidth or defaultOptions.spaceWidth or npFont.spaceWidth or
-        (condense and eWidth or npFont.charW)
+    npFont.sepWidth = fontOptions.sepWidth or defaultOptions.sepWidth or npFont.sepWidth or math.max(math.floor(npFont.charW / 6), 1)
+    npFont.spaceWidth = fontOptions.spaceWidth or defaultOptions.spaceWidth or npFont.spaceWidth or (condense and eWidth or npFont.charW)
     npFont.lineSepHeight = fontOptions.lineSepHeight or defaultOptions.lineSepHeight or npFont.lineSepHeight or 0
 
     ---@class NonPartialFontOptions: FontOptions
@@ -117,8 +115,7 @@ local function fontOptionsFillDefaults(fontOptions, x, y)
         condense = condense,
         endOnNewLine = fontOptions.endOnNewLine == nil and defaultOptions.endOnNewLine or fontOptions.endOnNewLine,
         textAlign = fontOptions.textAlign or defaultOptions.textAlign or (x and "left" or "center"),
-        anchorHor = fontOptions.anchorHor or defaultOptions.anchorHor or
-            (fontOptions.textAlign or (x and "left" or "center")),
+        anchorHor = fontOptions.anchorHor or defaultOptions.anchorHor or (fontOptions.textAlign or (x and "left" or "center")),
         anchorVer = fontOptions.anchorVer or defaultOptions.anchorVer or (y and "top" or "center"),
     }
 

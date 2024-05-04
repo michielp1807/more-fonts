@@ -75,7 +75,7 @@ local function checkForFontUpdates()
     sleep(1)
 end
 
--- checkForFontUpdates()
+checkForFontUpdates()
 
 ---@class FontWithFilename: Font
 local defaultFont = mf.ccfont
