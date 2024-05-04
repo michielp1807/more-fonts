@@ -124,6 +124,11 @@ mf.writeOn(term, "MORE\nFONTS", nil, nil, {dx = 32, anchorVer = "bottom"})
 As seen in these previous examples, you can also move the text using the `dx` and `dy` options. These `dx` and `dy` values are in *teletext pixels* (unlike the standard `x` and `y` of the `writeOn` function), so this is useful for precise positioning, or if you want to shift the text a bit from the center as in the examples above.
 
 
+## Font browser
+Use the font browser to preview all available fonts from GitHub. Navigate left or right to switch between fonts.
+![mf-font-browser](https://github.com/MichielP1807/more-fonts/assets/16452219/e5584c98-ad0e-42e1-b2c9-d5f5206c4056)
+
+
 ## Adding more custom fonts
 ### Create font from image texture
 To create your own fonts that you can use with this library, you must first create a PNG image texture of the font. The width and height of this image must be multiples of 16, and every character must be put in its correct place based on the default ComputerCraft font (which is basically ASCII order with some additional characters).
