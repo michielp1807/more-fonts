@@ -329,34 +329,38 @@ local function drawTextOneLine(term, text, x, y, fontOptions, firstCharRow, firs
         local arrayIndex = 1
 
         local textIndex = 0
-        local currentChar, currentCharEnd, charX
+        local currentChar, currentCharStart
+        local currentCharEnd = 0
+        local startX = 1     -- start of char in font bitmap
+        local charX = 1 - dx -- subtract x offset
         local rowData1, rowData2, rowData3
 
         local needCharSep = false
         local function getNextCharData()
             textIndex = textIndex + 1
             currentChar = byte(text, textIndex)
+            currentCharStart = currentCharEnd
             if isCondensed then
                 local charWidth = byte(font.lengthX, currentChar + 1) - DATA_START
                 if charWidth == 0 then -- empty space character
-                    currentCharEnd = ceil(font.spaceWidth * scale)
-                    charX = 1
+                    currentCharEnd = currentCharEnd + font.spaceWidth * scale
+                    startX = 1
                     rowData1 = {}
                     rowData2 = {}
                     rowData3 = {}
                     needCharSep = false
                     return
                 end
-                local startX = byte(font.startX, currentChar + 1) - DATA_START
-                currentCharEnd = ceil((startX + charWidth - 1) * scale)
-                charX = ceil((startX - 1) * scale + 1)
+                startX = byte(font.startX, currentChar + 1) - DATA_START
                 if needCharSep then -- add space for separator
-                    charX = charX - ceil(font.sepWidth * scale)
+                    currentCharEnd = currentCharEnd + font.sepWidth * scale
+                    currentCharStart = currentCharEnd
                 end
+                currentCharEnd = currentCharEnd + charWidth * scale
                 needCharSep = true
             else
-                currentCharEnd = ceil(font.charW * scale)
-                charX = 1
+                currentCharEnd = currentCharEnd + font.charW * scale
+                -- charX = 1
             end
 
             rowData1 = getRowData(currentChar, yIndex1)
@@ -365,7 +369,6 @@ local function drawTextOneLine(term, text, x, y, fontOptions, firstCharRow, firs
         end
 
         getNextCharData()
-        charX = charX - dx -- subtract x offset
 
         local ttCharNr, xIndex
         repeat
@@ -380,7 +383,7 @@ local function drawTextOneLine(term, text, x, y, fontOptions, firstCharRow, firs
             end
 
             -- Left column
-            xIndex = ceil(charX * scaleInv)
+            xIndex = ceil((charX - currentCharStart) * scaleInv) + startX - 1
             if rowData1[xIndex] == 1 then ttCharNr = ttCharNr + 1 end
             if rowData2[xIndex] == 1 then ttCharNr = ttCharNr + 4 end
             if rowData3[xIndex] == 1 then ttCharNr = ttCharNr + 16 end
@@ -397,7 +400,7 @@ local function drawTextOneLine(term, text, x, y, fontOptions, firstCharRow, firs
             end
 
             -- Right column
-            xIndex = ceil(charX * scaleInv)
+            xIndex = ceil((charX - currentCharStart) * scaleInv) + startX - 1
             if rowData1[xIndex] == 1 then ttCharNr = ttCharNr + 2 end
             if rowData2[xIndex] == 1 then ttCharNr = ttCharNr + 8 end
             if rowData3[xIndex] == 1 then
@@ -457,13 +460,13 @@ local function drawMultiLineText(term, text, x, y, fontOptions, noScroll)
     local anchorHorFac = alignFactor(fontOptions.anchorHor)
     local anchorVerFac = alignFactor(fontOptions.anchorVer)
 
-    -- Center text if no coordinates provided
-    x = x or (TERM_WIDTH * 0.5 + 1)
-    y = y or (TERM_HEIGHT * 0.5 + 1)
+    -- Center text if no coordinates provided, and convert to teletext pixels
+    x = (x or (TERM_WIDTH * 0.5 + 1)) * 2
+    y = (y or (TERM_HEIGHT * 0.5 + 1)) * 3
 
     -- Offset for anchor alignment
-    x = x - anchorHorFac * TEXT_WIDTH / 2
-    y = y - anchorVerFac * TEXT_HEIGHT / 3
+    x = x - anchorHorFac * TEXT_WIDTH
+    y = y - anchorVerFac * TEXT_HEIGHT
 
     local dx = fontOptions.dx
     local dy = fontOptions.dy
@@ -475,9 +478,9 @@ local function drawMultiLineText(term, text, x, y, fontOptions, noScroll)
         local xOffset = textAlignFac * (TEXT_WIDTH - lineWidths[i])
         local yOffset = (i - 1) * lineHeight
 
-        -- Convert to teletext pixels for rounding, then convert back
-        local lx = math.floor(x * 2 + dx + xOffset + 0.5)
-        local ly = math.floor(y * 3 + dy + yOffset + 0.5)
+        -- Round with offsets, then convert back screen pixels
+        local lx = math.floor(x + dx + xOffset + 0.5)
+        local ly = math.floor(y + dy + yOffset + 0.5)
         fontOptions.dx = lx % 2
         fontOptions.dy = ly % 3
         lx = math.floor(lx / 2)
@@ -496,8 +499,7 @@ local function drawMultiLineText(term, text, x, y, fontOptions, noScroll)
             end
         end
 
-        lastCharRow, lastCharRowStart = drawTextOneLine(term, lines[i], lx, ly, fontOptions, lastCharRow,
-            lastCharRowStart)
+        lastCharRow, lastCharRowStart = drawTextOneLine(term, lines[i], lx, ly, fontOptions, lastCharRow, lastCharRowStart)
     end
     if fontOptions.endOnNewLine then
         print()
