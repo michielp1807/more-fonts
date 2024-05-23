@@ -5,6 +5,13 @@ A library to print large text using teletext pixels with various fonts, sizes, a
 
 ![mf-header](https://github.com/MichielP1807/more-fonts/assets/16452219/bc8cd6c6-432b-45ac-8707-3392eb57ecc1)
 
+- [Basic usage](#basic-usage)
+- [Font options](#font-options)
+- [Pine3D Edition](#pine3d-edition)
+- [Font browser](#font-browser)
+- [Adding more custom fonts](#adding-more-custom-fonts)
+
+
 ## Basic usage
 Use the `print` function to print some text at the current cursor location:
 ```lua
