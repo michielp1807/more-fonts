@@ -126,9 +126,33 @@ mf.writeOn(term, "MORE\nFONTS", nil, nil, {dx = 32, anchorVer = "bottom"})
 As seen in these previous examples, you can also move the text using the `dx` and `dy` options. These `dx` and `dy` values are in *teletext pixels* (unlike the standard `x` and `y` of the `writeOn` function), so this is useful for precise positioning, or if you want to shift the text a bit from the center as in the examples above.
 
 
+## Pine3D Edition
+Want to use More Fonts with [Pine3D](https://pinestore.cc/projects/24/pine3d)? Use More Fonts Pine3D Edition to draw directly to draw directly to a Pine3D frame buffer!
+
+![mf-pine3d-edition](https://github.com/MichielP1807/more-fonts/assets/16452219/cd7dae93-c716-40e8-9dab-b7c37870a472)
+
+It only has a `writeOn` function, it does not fill background colors, the text color is passed as an argument, and all coordinates are in teletext pixels (instead of terminal character pixels), but other than that it works exactly the same as the standalone version:
+```lua
+local Pine3D = require("Pine3D")
+local mf = require("morefonts-pe") -- More Fonts Pine3D Edition
+
+local frame = Pine3D.newFrame()
+mf.writeOn(frame, "More Fonts", colors.blue, 3, 3, {condense = true})
+frame:drawBuffer()
+```
+
+Get the Pine3D Edition with the following command:
+```
+wget https://raw.githubusercontent.com/MichielP1807/more-fonts/main/pine3d/morefonts-pe.lua
+```
+
+
 ## Font browser
 Use the font browser to preview all available fonts from GitHub. Navigate left or right to switch between fonts.
+
 ![mf-font-browser](https://github.com/MichielP1807/more-fonts/assets/16452219/e5584c98-ad0e-42e1-b2c9-d5f5206c4056)
+
+It automatically downloads new fonts when they become available on GitHub!
 
 
 ## Adding more custom fonts
@@ -142,6 +166,7 @@ Once you have your image texture, you can convert it with the `0_texture2lua.py`
 If you want to include `sepWidth`, `spaceWidth`, or `lineSepHeight` parameters with your font, or you want to include other metadata like the author name or font license, I recommend creating a `metadata.json` file in the same directory as the image texture. All properties in the `metadata.json` will automatically be included in the exported font file.
 
 In the [my-fonts](https://github.com/MichielP1807/more-fonts/tree/main/fonts/my-fonts) folder you can see the files I used to generate my PixelPlace font as an example.
+
 
 ### Convert TTF/OTF to image texture
 Instead of creating your own image textures, you can also convert TTF or OTF fonts to image textures automatically, just give it the path to the TTF or OTF font and the font size to use:
