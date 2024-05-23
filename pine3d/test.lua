@@ -246,7 +246,6 @@ test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil
 test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil, {wrapWidth = 60, condense = true})
 test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil, {wrapWidth = 60, textAlign = "left"})
 test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil, {wrapWidth = 60, condense = true, textAlign = "left"})
--- TODO: these three test also fail, likely because of build up in rounding error vertically
 test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil, {wrapWidth = 60, condense = true, lineSepHeight = 4})
 test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil, {wrapWidth = 60, condense = true, spaceWidth = 3})
 test("Hey there! Hello, world. How are you? What's up?", colors.orange, nil, nil, {wrapWidth = 60, condense = true, sepWidth = 5})
