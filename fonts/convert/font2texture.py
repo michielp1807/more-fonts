@@ -39,6 +39,7 @@ CHARS = [
     "ðñòóôõö÷øùúûüýþÿ",
 ]
 
+print(os.getcwd())
 font = ImageFont.truetype(args.filename, args.fontsize)
 
 # Get char stats

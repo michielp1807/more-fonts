@@ -166,9 +166,9 @@ It automatically downloads new fonts when they become available on GitHub!
 ### Create font from image texture
 To create your own fonts that you can use with this library, you must first create a PNG image texture of the font. The width and height of this image must be multiples of 16, and every character must be put in its correct place based on the default ComputerCraft font (which is basically ASCII order with some additional characters).
 
-Once you have your image texture, you can convert it with the `0_texture2lua.py` Python script:
+Once you have your image texture, you can convert it with the `texture2lua.py` Python script:
 ```
-./0_texture2lua.py ./my-fonts/PixelPlace.png
+./convert/texture2lua.py ./my-fonts/PixelPlace.png
 ```
 If you want to include `sepWidth`, `spaceWidth`, or `lineSepHeight` parameters with your font, or you want to include other metadata like the author name or font license, I recommend creating a `metadata.json` file in the same directory as the image texture. All properties in the `metadata.json` will automatically be included in the exported font file.
 
@@ -176,8 +176,8 @@ In the [my-fonts](https://github.com/MichielP1807/more-fonts/tree/main/fonts/my-
 
 
 ### Convert TTF/OTF to image texture
-Instead of creating your own image textures, you can also convert TTF or OTF fonts to image textures automatically, just give it the path to the TTF or OTF font and the font size to use:
+Instead of creating your own image textures, you can also convert TTF or OTF fonts to image textures automatically. Just give it the path to the TTF or OTF font and the font size to use:
 ```
-./0_font2texture.py GGBotNet-Public-Pixel/PublicPixel.ttf 8
+./convert/font2texture.py GGBotNet-Public-Pixel/PublicPixel.ttf 8
 ```
 If you convert someone else's font, please make sure to include the author's name, the font name, the source where you got the font from, and license & copyright information in the metadata of the font! Fonts licensed as Creative Commons or SIL Open Font License generally allow you to use and redistribute the fonts as you wish, but this often does require the appropriate attribution. Always check the license to be sure!
