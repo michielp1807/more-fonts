@@ -168,11 +168,11 @@ To create your own fonts that you can use with this library, you must first crea
 
 Once you have your image texture, you can convert it with the `texture2lua.py` Python script:
 ```
-./convert/texture2lua.py ./my-fonts/PixelPlace.png
+./convert/texture2lua.py ./my-font/PixelPlace.png
 ```
 If you want to include `sepWidth`, `spaceWidth`, or `lineSepHeight` parameters with your font, or you want to include other metadata like the author name or font license, I recommend creating a `metadata.json` file in the same directory as the image texture. All properties in the `metadata.json` will automatically be included in the exported font file.
 
-In the [my-fonts](https://github.com/MichielP1807/more-fonts/tree/main/fonts/my-fonts) folder you can see the files I used to generate my PixelPlace font as an example.
+In the [my-font](https://github.com/MichielP1807/more-fonts/tree/main/fonts/my-font) folder you can see the files I used to generate my PixelPlace font as an example.
 
 
 ### Convert TTF/OTF to image texture
