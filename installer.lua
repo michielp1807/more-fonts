@@ -1,10 +1,15 @@
 local NAME = "More Fonts Installer"
 local REPO_LINK = "https://raw.githubusercontent.com/MichielP1807/more-fonts/main/"
-local FOLDERS = {}
-local DOWNLOADS = {
-    "morefonts.lua",
-    "fontbrowser.lua",
-}
+
+local DOWNLOADS = {}
+local argStr = table.concat({...}, " ")
+if argStr:lower():find("pine3d") then
+    NAME = "More Fonts [Pine3D Edition] Installer"
+    DOWNLOADS[#DOWNLOADS + 1] = "pine3d/morefonts-pe.lua"
+else
+    DOWNLOADS[#DOWNLOADS + 1] = "morefonts.lua"
+end
+DOWNLOADS[#DOWNLOADS + 1] = "fontbrowser.lua"
 
 local width, height = term.getSize()
 local totalDownloaded = 0
@@ -31,14 +36,14 @@ local function download(path, attempt)
     local rawData = http.get(REPO_LINK .. path)
     update("Downloaded " .. path .. "!")
     if not rawData then
-        if attempt == 3 then
-            error("Failed to download " .. path .. " after 3 attempts!")
-        end
+        if attempt == 3 then error("Failed to download " .. path .. " after 3 attempts!") end
         update("Failed to download " .. path .. ". Trying again (attempt " .. (attempt + 1) .. "/3)")
         return download(path, attempt + 1)
     end
     local data = rawData.readAll()
-    local file = fs.open(path, "w")
+
+    local filename = path:sub((path:find("/") or 0) + 1) -- remove folder from path
+    local file = fs.open(filename, "w")
     file.write(data)
     file.close()
 end
@@ -65,16 +70,8 @@ local function install()
     update("Installing...")
     bar(0)
 
-    local total = #FOLDERS + #DOWNLOADS
-    for i = 1, #FOLDERS do
-        local folder = FOLDERS[i]
-        update("Creating " .. folder .. " folder...")
-        fs.makeDir(folder)
-        bar(i / total)
-    end
-
-    totalDownloaded = #FOLDERS
-    downloadAll(DOWNLOADS, total)
+    totalDownloaded = 0
+    downloadAll(DOWNLOADS, #DOWNLOADS)
 
     update("Installation finished!")
 
