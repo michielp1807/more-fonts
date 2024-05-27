@@ -74,7 +74,7 @@ for pngFile in args.filenames:
 
     def toLongBracketString(text):
         longBracketLevel = 0
-        while ("]" + longBracketLevel * "=" + "]") in text:
+        while ("[" + longBracketLevel * "=" + "[") in text or ("]" + longBracketLevel * "=" + "]") in text:
             longBracketLevel += 1
         return "[%s[%s]%s]" % (longBracketLevel * "=", text, longBracketLevel * "=")
 
