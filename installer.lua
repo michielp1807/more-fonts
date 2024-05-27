@@ -8,8 +8,8 @@ if argStr:lower():find("pine3d") then
     DOWNLOADS[#DOWNLOADS + 1] = "pine3d/morefonts-pe.lua"
 else
     DOWNLOADS[#DOWNLOADS + 1] = "morefonts.lua"
+    DOWNLOADS[#DOWNLOADS + 1] = "fontbrowser.lua"
 end
-DOWNLOADS[#DOWNLOADS + 1] = "fontbrowser.lua"
 
 local width, height = term.getSize()
 local totalDownloaded = 0
