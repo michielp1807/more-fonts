@@ -80,7 +80,7 @@ Any font option that you do not include in your own default font options will us
 The `font` option specifies which font is used. It can either be a string with a path to a font file, or a font object (e.g. loaded via `mf.loadFont`, or the default font `mf.ccfont`).
 
 If you specify a path, it will automatically try to download the font from GitHub based on the provided file name if the file doesn't exist.
-For example, if you set the font to `"fonts/PublicPixel"`, but your computer does not contain a `PublicPixel` file in the `fonts` folder, it will download the PublicPixel font from GitHub and save it to the specified path.
+For example, if you set the font to `"fonts/PublicPixel"`, but your computer does not contain a `PublicPixel` file in the `fonts` folder, it will download the PublicPixel font from this repository and save it to the specified path.
 
 ### Font scaling
 Text size is dependent on the font that is used. Fonts that have higher resolution characters, will appear larger than fonts with lower resolution characters.
