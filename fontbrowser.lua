@@ -1,10 +1,7 @@
 -- Font browser for MORE FONTS
 local function downloadFile(filename, url)
     local res = http.get(url)
-    if not res then
-        error("Could download " .. filename .. " from " .. url)
-        return
-    end
+    if not res then error("Error downloading font from " .. url) end
     local data = res.readAll()
     res.close()
     local file = fs.open(filename, "w")

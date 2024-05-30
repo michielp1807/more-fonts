@@ -76,12 +76,19 @@ mf.print("hi", {font = "fonts/3x3-Mono"}) -- uses 3x3 Mono instead of default fo
 ```
 Any font option that you do not include in your own default font options will use the library's default value by default.
 
-### Fonts & font sizes
-Fonts size is dependent on the font that is used. Fonts that have higher resolution characters, will appear larger than fonts with lower resolution characters.
+### Using different fonts
+The `font` option specifies which font is used. It can either be a string with a path to a font file, or a font object (e.g. loaded via `mf.loadFont`, or the default font `mf.ccfont`).
+
+If you specify a path, it will automatically try to download the font from GitHub based on the provided file name if the file doesn't exist.
+For example, if you set the font to `"fonts/PublicPixel"`, but your computer does not contain a `PublicPixel` file in the `fonts` folder, it will download the PublicPixel font from GitHub and save it to the specified path.
+
+### Font scaling
+Text size is dependent on the font that is used. Fonts that have higher resolution characters, will appear larger than fonts with lower resolution characters.
 You can set the `scale` option to make text even larger, e.g. setting the scale to 3 will triple size of the displayed text:
 ```lua
 mf.print("HUGE", {scale = 3}) -- same size as Bigfont's Huge (with default CC font)
 ```
+Fonts will look best when using integer scaling values. Using non-integer scaling values (e.g. `scale = 0.5`) works, but the text might look a bit wonky.
 
 <!-- Scale 1 = BigFont's size 1 (big) -->
 <!-- Scale 3 = BigFont's size 2 (huge) -->

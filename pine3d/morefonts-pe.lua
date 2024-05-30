@@ -67,7 +67,18 @@ end
 ---@return Font
 mf.loadFont = function(fontPath)
     expect(1, fontPath, "string")
-    if not fs.exists(fontPath) then error("Can't find font " .. fontPath) end
+    if not fs.exists(fontPath) then -- try download font from GitHub
+        local fontName = fontPath:match("([^\\/]-)$")
+        local fontURL = "https://raw.githubusercontent.com/MichielP1807/more-fonts/main/fonts/" .. fontName
+        local res = http.get(fontURL)
+        if not res then error("Could not find font \"" .. fontName .. "\" locally, or on GitHub...") end
+        local data = res.readAll()
+        res.close()
+        local file = fs.open(fontPath, "w")
+        if not file then error("Can't write to file " .. fontPath .. "...") end
+        file.write(data)
+        file.close()
+    end
     local file, err = fs.open(fontPath, "r")
     if not file then error("Can't open font " .. fontPath .. (err and (": " .. err) or "")) end
     local str = file.readAll()
