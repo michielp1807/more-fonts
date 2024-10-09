@@ -79,9 +79,13 @@ local function install()
 
     term.setBackgroundColor(colors.black)
     term.setTextColor(colors.white)
+
     term.clear()
 
     term.setCursorPos(1, 1)
+
+    if argStr:lower():find("noconfirm") then return end
+
     write("Finished installation!\nPress any key to close...")
 
     os.pullEventRaw()
