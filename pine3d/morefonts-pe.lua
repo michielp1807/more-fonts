@@ -270,6 +270,19 @@ local function calculateTextSize(text, fontOptions)
     return maxWidth, totalHeight, lines, lineWidths
 end
 
+---Calculate text width and height in teletext pixels
+---
+---Also returns information about how the text is divided over multiple lines
+---@param text string
+---@param fontOptions FontOptions
+---@return integer width (in teletext pixels)
+---@return integer height (in teletext pixels)
+---@return string[] lines the text to print on everyline (based on newlines and automatic wrapping)
+---@return integer[] lineWidths the width of every individual line (in teletext pixels)
+mf.calculateTextSize = function(text, fontOptions)
+    return calculateTextSize(text, fontOptionsFillDefaults(fontOptions or {}, nil, nil))
+end
+
 ---Draw a single line of text
 ---@param buffer Buffer terminal to print text on
 ---@param text string text to print
