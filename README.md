@@ -189,3 +189,6 @@ Instead of creating your own image textures, you can also convert TTF or OTF fon
 ./convert/font2texture.py GGBotNet-Public-Pixel/PublicPixel.ttf 8
 ```
 If you convert someone else's font, please make sure to include the author's name, the font name, the source where you got the font from, and license & copyright information in the metadata of the font! Fonts licensed as Creative Commons or SIL Open Font License generally allow you to use and redistribute the fonts as you wish, but this often does require the appropriate attribution. Always check the license to be sure!
+
+## License
+The More Fonts source code is licensed under the MIT license, except for the fonts which specify another license (usually either Creative Commons or SIL Open Font License). The font files which are not licensed under MIT will indicate this in the "license" property within the file along with the original author and copyright information.
